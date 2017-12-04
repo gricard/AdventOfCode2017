@@ -5,7 +5,7 @@ const getShellMax = function(shell) {
     //      2 + 1 = 3
     //      3 ^ 2 = 9
     return Math.pow((shell * 2) + 1, 2);
-}
+};
 
 const getCornerMovementChange = function(x, y) {
     let movement;
@@ -19,7 +19,7 @@ const getCornerMovementChange = function(x, y) {
             movement = Moves.forward;
         }
     return movement;
-}
+};
 
 const getCoords = function(end) {
     let i = 1,
@@ -95,7 +95,7 @@ const getCoords = function(end) {
 
 const getNumSteps = function(coords) {
     return Math.abs(coords[0]) + Math.abs(coords[1]);
-}
+};
 
 // constants for movement and axis 
 const 
