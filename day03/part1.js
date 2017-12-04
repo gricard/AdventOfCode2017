@@ -7,6 +7,20 @@ const getShellMax = function(shell) {
     return Math.pow((shell * 2) + 1, 2);
 }
 
+const getCornerMovementChange = function(x, y) {
+    let movement;
+        if (x < 0 && y < 0) {
+            movement = Moves.forward;
+        } else if (x < 0 && y > 0) {
+            movement = Moves.back;
+        } else if (x > 0 && y > 0) {
+            movement = Moves.back;
+        } else if (x > 0 && y < 0) {
+            movement = Moves.forward;
+        }
+    return movement;
+}
+
 const getCoords = function(end) {
     let i = 1,
     x = 0,
@@ -16,91 +30,61 @@ const getCoords = function(end) {
     axis = Axis.X;
 
     while (i < end) {
-        //console.log('');
-        //console.log(i + ' ' + x + ', ' + y);
-        //console.log('   shell', shell, 'dir', movement, 'axis', axis);
-
         if (movement === Moves.forward) {
-            //console.log(' > fwd');
             if (axis === Axis.X) {
                 x++;
-                //console.log('  > next coord = ' + x + 'x' + y);
 
                 // hit the edge, change axis
                 if (Math.abs(x) >= shell) {
                     axis = Axis.Y;
-                    //console.log('    > change axis', axis);
                 }
             } else {
                 // axis === Axis.Y
                 y++;
-                //console.log('  > next coord = ' + x + 'x' + y);
 
                 // hit the edge, change axis
                 if (Math.abs(y) >= shell) {
                     axis = Axis.X;
-                    //console.log('    > change axis', axis);
                 }
             }
 
-            //console.log('abs x, y', Math.abs(x),Math.abs(y));
             // corner, change direction
             if (Math.abs(x) === Math.abs(y)) {
-                if (x < 0 && y < 0) {
-                    movement = Moves.forward;
-                } else if (x < 0 && y > 0) {
-                    movement = Moves.back;
-                } else if (x > 0 && y > 0) {
-                    movement = Moves.back;
-                } else if (x > 0 && y < 0) {
-                    movement = Moves.forward;
-                }
-                //console.log('    > change direction', movement);
-            }
+                movement = getCornerMovementChange(x, y);
+             }
         } else {
-            //console.log(' > back');
             if (axis === Axis.X) {
                 x--;
-                //console.log('  > next coord = ' + x + 'x' + y);
 
                 // hit the edge, change axis
                 if (Math.abs(x) >= shell) {
                     axis = Axis.Y;
-                    //console.log('    > change axis', axis);
                 }
             } else {
                 // axis === Axis.Y
                 y--;
-                //console.log('  > next coord = ' + x + 'x' + y);
 
                 // hit the edge, change axis
                 if (Math.abs(y) >= shell) {
                     axis = Axis.X;
-                    //console.log('    > change axis', axis);
                 }
             }
 
-            //console.log('abs x, y', Math.abs(x),Math.abs(y));
             // corner, change direction
             if (Math.abs(x) === Math.abs(y)) {
-                if (x < 0 && y < 0) {
-                    movement = Moves.forward;
-                } else if (x < 0 && y > 0) {
-                    movement = Moves.back;
-                } else if (x > 0 && y > 0) {
-                    movement = Moves.back;
-                } else if (x > 0 && y < 0) {
-                    movement = Moves.forward;
-                }
-                //console.log('    > change direction', movement);
+               movement = getCornerMovementChange(x, y);
             }
         }
 
         i++;
 
+        // advance to next shell
         if (i >= getShellMax(shell)) {
-            //console.log('INCREMENT SHELL');
             shell++;
+
+            // this feels dirty
+            // the logic above ought to handle this change
+            // but reset the state
             axis = Axis.X;
             movement = Moves.forward;
         }
